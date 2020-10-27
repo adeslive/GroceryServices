@@ -20,7 +20,7 @@ export default class Home extends React.Component {
         this.state = {
             title: STRINGS.TITLE,
             url: URLS.HOMEPAGE,
-            loading: true,
+            loading: false,
             hasInternet: true,
             scrolled: false,
             canChange: true,
@@ -81,7 +81,7 @@ export default class Home extends React.Component {
     }
 
     show() {
-        setTimeout(() => this.setState({ loading: false }), 1000);
+        setTimeout(() => this.setState({ loading: false }), 2000);
     }
 
     hide() {
@@ -156,11 +156,6 @@ export default class Home extends React.Component {
 
     changeInternetStatus(value) {
         this.setState({ hasInternet: value });
-        if (value === false) {
-            this.show();
-        } else {
-            this.hide();
-        }
     }
 
     checkInternet() {
@@ -175,7 +170,7 @@ export default class Home extends React.Component {
 
     render() {
         const navigation = this.props.navigation;
-        const fixZoom = `const meta = document.createElement('meta'); meta.name="viewport" ;meta.content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"; document.getElementsByTagName('head')[0].appendChild(meta); `;
+        const fixZoom = `const meta = document.createElement('meta'); meta.name="viewport" ;meta.content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"; document.getElementsByTagName('head')[0].appendChild(meta); navigator.location.getCurrentPosition(function(position){console.log(position)}, function(error){}, {})`;
         return (
             <StackNavigator.Navigator
                 screenOptions={{
@@ -235,6 +230,7 @@ export default class Home extends React.Component {
 
                     
                     {() => (
+			<>
                         <Animated.View style={{ flex: 1, transform: [{ translateY: this.getBodyAnimation() }] }}>
                             {
                                 this.state.hasInternet &&
@@ -246,6 +242,7 @@ export default class Home extends React.Component {
                                     onError={() => this.changeInternetStatus(false)}
                                     onScroll={this.animate.bind(this)}
                                     ref={webview => this.Web = webview}
+                                    geolocationEnabled={true}
                                     onNavigationStateChange={this.navChange}
                                     injectedJavaScript={fixZoom}
                                     showsHorizontalScrollIndicator={false}
@@ -284,8 +281,10 @@ export default class Home extends React.Component {
                                 </View>
                             }
 
-                            {this.state.loading && this.state.hasInternet && <FlipLoader />}
+                            {this.state.loading &&  <FlipLoader />}
                         </Animated.View>
+			
+			</>
                     )}
                 </StackNavigator.Screen>
             </StackNavigator.Navigator>

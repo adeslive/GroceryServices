@@ -13,6 +13,6 @@ public class SecondActivity extends ReactActivity {
 
   @Override
   protected String getMainComponentName() {
-    return "Siempre";
+    return "GroceryServices";
   }
 }
