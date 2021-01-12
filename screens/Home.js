@@ -22,6 +22,7 @@ export default class Home extends React.Component {
             url: URLS.HOMEPAGE,
             loading: false,
             hasInternet: true,
+            validURL: true,
             scrolled: false,
             canChange: true,
             headerValue: new Animated.Value(1),
@@ -149,13 +150,18 @@ export default class Home extends React.Component {
     navChange = (newNavState) => {
         if (this.state.url !== newNavState.url) {
             this.setState({
-                url: newNavState.url
+                url: newNavState.url,
+                validURL: true
             })
         }
     }
 
     changeInternetStatus(value) {
         this.setState({ hasInternet: value });
+    }
+
+    changeValidURL(value) {
+        this.setState({validURL: value})
     }
 
     checkInternet() {
@@ -165,6 +171,17 @@ export default class Home extends React.Component {
             })
             .catch((error) => {
                 this.changeInternetStatus(false);
+            })
+    }
+
+
+    checkURL() {
+        fetch(this.state.url)
+            .then((response) => {
+                this.changeValidURL(response.status === 200 ? true : false);
+            })
+            .catch((error) => {
+                this.changeValidURL(false);
             })
     }
 
@@ -232,15 +249,47 @@ export default class Home extends React.Component {
                     {() => (
 			<>
                         <Animated.View style={{ flex: 1, transform: [{ translateY: this.getBodyAnimation() }] }}>
+                           
+                        {
+                                !this.state.validURL &&
+                                this.state.hasInternet &&
+                                <View
+                                    style={{
+                                        minHeight: '100%',
+                                        alignItems: 'center',
+                                        alignContent: 'center',
+                                        justifyContent: 'space-evenly'
+                                    }}
+                                >
+
+                                    <View
+                                        style={{
+                                            alignItems: 'center',
+                                            alignContent: 'center',
+                                        }}
+                                    >
+                                        <Image source={IMAGES.NO_INTERNET} style={{ width: 192, height: 192, resizeMode: 'contain', marginBottom: 50 }} />
+                                        <Text
+                                            style={{
+                                                fontSize: 18,
+                                                textAlign: 'center'
+                                            }}>We are not able to display this website.
+                                            Contact the site owner and try again later.
+                                        </Text>
+
+                                    </View>
+                                    <Button title="Retry" onPress={() => this.checkURL()} color={COLORS.PRIMARY_COLOR}></Button>
+                                </View>
+                            }
+                           
                             {
                                 this.state.hasInternet &&
                                 <WebView
-
                                     source={{ uri: URLS.HOMEPAGE }}
                                     onLoadStart={() => this.hide()}
                                     onLoadEnd={() => this.show()}
-                                    onError={() => this.changeInternetStatus(false)}
                                     onScroll={this.animate.bind(this)}
+                                    onError={() => this.changeValidURL(false)}
                                     ref={webview => this.Web = webview}
                                     geolocationEnabled={true}
                                     onNavigationStateChange={this.navChange}
@@ -267,7 +316,7 @@ export default class Home extends React.Component {
                                             alignContent: 'center',
                                         }}
                                     >
-                                        <Image source={IMAGES.MENU.HAMBURGUER} style={{ width: 192, height: 192, resizeMode: 'contain', marginBottom: 50 }} />
+                                        <Image source={IMAGES.NO_INTERNET} style={{ width: 192, height: 192, resizeMode: 'contain', marginBottom: 50 }} />
                                         <Text
                                             style={{
                                                 fontSize: 18,

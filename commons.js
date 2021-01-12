@@ -1,7 +1,7 @@
 const STRINGS = {
-    TITLE: 'Baby Nutrition Shop',
+    TITLE: 'Grocery Services',
     SCREENS: {
-        HOME: 'Baby Nutrition Shop',
+        HOME: 'Grocery Services',
         ABOUT: "About",
         EXIT: "Exit"
     },
@@ -9,12 +9,12 @@ const STRINGS = {
 
 const URLS = {
     ROOT:"https://webstore.ftssol.com/",
-    HOMEPAGE: "https://webstore.ftssol.com/cygnuswsca_babynutrition/en/",
-    ABOUT_US: "https://webstore.ftssol.com/cygnuswsca_babynutrition/content/4-about-us"
+    HOMEPAGE: "https://webstore.ftssol.com/CygnusWebStore_GroceryServices/",
+    ABOUT_US: "https://www.grocsvcs.com/about-us/"
 }
 
 const COLORS = {
-    PRIMARY_COLOR: "#0096ab",
+    PRIMARY_COLOR: "#326949",
     LOADER_BG_COLOR: 'rgba(255, 255, 255, 1.0)'
 }
 
